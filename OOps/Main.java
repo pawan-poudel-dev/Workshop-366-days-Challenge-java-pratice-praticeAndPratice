@@ -1,5 +1,3 @@
-package Pratice1;
-
 class Main {
    String name;
 
