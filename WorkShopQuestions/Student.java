@@ -1,81 +1,53 @@
-
-/*
-
-
-
-*/
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 public class Student {
     private String name;
-    private  int studentId;
-    private String programme;
-    private int year;
-    private String college;
+    private int studentId;
+    private int age;
+    private String course;
+    Student (String name, int studentId, int age,String course){
+        this.name = name;
+        this.studentId = studentId;
+        this.age = age;
+        this.course= course;
 
-//constructor with all five param 
-// getter for each field
-//getInitials();spilit name , take first char of  each 
-public Student(String name, int studentId,String programme, int year,String college){
-    this.name = name;
-    this.studentId = studentId;
-    this.programme = programme;
-    this.year = year;
-    this.college = college;
-
-}
-public String getName(){
-    return name;
-}
-public int getId(){
-    return studentId;
-}
-public String getProgramme(){
-    return programme;
-
-}
-public int getYear(){
-    return year;
-
-}
-public String getCollege(){
-    return college;
-}
-public String getInitials(){
-    String[] parts = name.split(" ");
-    StringBuilder initials = new StringBuilder();
-    for (String part : parts) {
-        if (!part.isEmpty()) {
-            initials.append(part.charAt(0));
-        }
     }
-    return initials.toString();
+    public  String  getName(){
+        return name;
+    }
+    public int getStudentId(){
+        return studentId;
+    }
+    public int getAge(){
+        return age;
+    }
+    public String getCourse(){
+        return course;
+    }
 
-
-
-
+    
 }
+class  StudentTest{
+    public static void main(String [] args){
+        Student obj = new Student("Pawan poudel", 12, 20,"Logic and problem solving");
+        Student obj1 = new Student("Ram Bahadur Khanal" , 32,24,"Java");
+        Student obj2 = new Student("Sangam Xettri",34,67,"python");
+        System.out.println( obj.getName());
+        System.out.println( obj.getStudentId());
+        System.out.println( obj.getAge());
+        System.out.println( obj.getCourse());
+        
+        System.out.println( "\n\n");
 
-public String toHTML() {
-    LocalDate today = LocalDate.now();
-    LocalDate expiry = today.plusYears(4);
-    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd MMM yyyy");
-    return "<html>"
-        + "<div style='text-align:center; padding:15px;'>"
-        + "<h2>" + college + "</h2>"
-        + "<hr>"
-        + "<p><b>" + name + "</b> (" + getInitials() + ")"
-        + "</p>"
-        + "<p>ID: " + studentId + "</p>"
-        + "<p>Programme: <i>" + programme + "</i></p>"
-        + "<p>Year: " + year + "</p>"
-        + "<hr><p><small>Issued: " + today.format(fmt)
-        + " | Expires: " + expiry.format(fmt) + "</small></p>"
-        + "</div></html>"
-        + "<h2 style='color:#1a3c6e;'>" + college + "</h2>"
-        + "<p style='color:gray;'><small>Issued: " + today.format(fmt) + "</small></p>";
+        System.out.println( obj1.getName());
+        System.out.println( obj1.getStudentId());
+        System.out.println( obj1.getAge());
+        System.out.println( obj1.getCourse());
+        System.out.println( "\n\n");
 
+        System.out.println( obj2.getName());
+        System.out.println( obj2.getStudentId());
+        System.out.println( obj2.getAge());
+        System.out.println( obj2.getCourse());
+        
 
-}
+    }
 }
