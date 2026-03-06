@@ -1,21 +1,31 @@
-class Main {
-   String name;
 
-   // setter method
-   void setName( String name ) {
-       this.name = name;
-   }
+public class Main {
+    public static void main(String[] args) {
 
-   // getter method
-   String getName(){
-       return this.name;
-   }
+        // --- Personal Plan ---
+        // AiModel reference holds a PersonalPlan instance (polymorphism)
+        AiModel personalPlan = new PersonalPlan("GPT-3.5", 0.02, 6, "4K tokens", 5);
+        System.out.println("=== Personal Plan ===");
+        System.out.println(personalPlan.display());
 
-   public static void main( String[] args ) {
-       Main obj = new Main();
+        // Cast needed to access PersonalPlan-specific methods
+        PersonalPlan pp = (PersonalPlan) personalPlan;
+        System.out.println("\n" + pp.enterPrompt("What is the capital of Nepal?", 10));
+        System.out.println(pp.purchasePrompts(3));
+        System.out.println(pp.purchasePrompts(-1)); // validation test
 
-       // calling the setter and the getter method
-       obj.setName("Toshiba");
-       System.out.println("obj.name: "+obj.getName());
-   }
+        System.out.println("\n");
+
+        // --- Pro Plan ---
+        AiModel proPlan = new ProPlan("GPT-4", 0.06, 175, "8K tokens", 3);
+        System.out.println("=== Pro Plan ===");
+        System.out.println(proPlan.display());
+
+        // Cast needed to access ProPlan-specific methods
+        ProPlan pro = (ProPlan) proPlan;
+        System.out.println("\n" + pro.addTeamMember("Hanuman"));
+        System.out.println(pro.addTeamMember("Rawan"));
+        System.out.println(pro.removeTeamMember("Bali"));
+    }
 }
+
