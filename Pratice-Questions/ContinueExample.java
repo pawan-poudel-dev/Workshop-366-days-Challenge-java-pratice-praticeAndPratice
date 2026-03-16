@@ -1,28 +1,18 @@
 /*
-Problem 2: Using continue
-Title: Skip Even Numbers
+Write a Java program to print all numbers from 1 to 10 except multiples of 3 using a for loop and continue.
 
-Write a program that:
-
-Uses a loop from 1 to 20
-
-Skips even numbers
-
-Prints only odd numbers
-
-📌 Concept used: continue
 
 
 */
 public class ContinueExample {
     public static void main(String [] args){
-        for( int i = 1; i <= 20; i++){
-            if(i %2 == 0){
-                continue;
-            }
-            System.out.println(i);
+     int i;
+     for(i = 1; i<= 10; i++){
+        if(i %3 ==0){
+            continue;// skips the rest of the iteration which is divisible by 3 
         }
-
+        System.out.print(i+" ");
+     }
     }
     
 }

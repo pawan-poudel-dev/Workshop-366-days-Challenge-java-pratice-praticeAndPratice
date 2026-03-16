@@ -1,29 +1,13 @@
-/*
-Problem 1: Using break
-Title: Stop at First Multiple of 7
-
-Write a program that:
-
-Uses a loop from 1 to 50
-
-Prints each number
-
-Stops the loop immediately when it finds the first number divisible by 7
-
-Prints "Loop stopped at <number>"
-
-📌 Concept used: break
-*/
 public class ExampleBreakStatement {
-public static void main(String [] args){
-    
-    for(int i = 1; i <= 50; i++){
-        if(i % 7 == 0){
-            break;
+    public static void main(String[] args) {
+        int i = 1; // start from 1
+
+        while(i <= 50) { // loop until 50
+            if(i % 7 == 0) {
+                System.out.println("First number divisible by 7: " + i);
+                break; // exit the loop immediately
+            }
+            i++; // increment i each time
         }
-System.out.println(i);
-        
     }
-}
-    
 }
