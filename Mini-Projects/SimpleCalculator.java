@@ -3,91 +3,135 @@ import javax.swing.*;
 
 public class SimpleCalculator extends JFrame implements ActionListener {
 
-    JLabel num1Label, num2Label, resultLabel;
-    JTextField num1Field, num2Field, resultField;
-    JButton addBtn, subBtn, mulBtn, divBtn;
+    JTextField display;
+    JButton[] numButtons = new JButton[10];
+    JButton addBtn, subBtn, mulBtn, divBtn, eqBtn, clrBtn;
+
+    double firstNumber = 0;
+    String operator = "";
+    boolean startNewNumber = true;
 
     public SimpleCalculator() {
-
         setTitle("Simple Calculator");
-        setSize(400,300);
+        setSize(300, 400);
         setLayout(null);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        num1Label = new JLabel("Number 1:");
-        num1Label.setBounds(50,40,100,30);
-        add(num1Label);
+        display = new JTextField();
+        display.setBounds(30, 30, 220, 40);
+        display.setEditable(false);
+        add(display);
 
-        num1Field = new JTextField();
-        num1Field.setBounds(150,40,150,30);
-        add(num1Field);
+        int x = 30, y = 80;
+        for (int i = 1; i <= 9; i++) {
+            numButtons[i] = new JButton(String.valueOf(i));
+            numButtons[i].setBounds(x, y, 50, 40);
+            numButtons[i].addActionListener(this);
+            add(numButtons[i]);
+            x += 60;
+            if (i % 3 == 0) { x = 30; y += 50; }
+        }
 
-        num2Label = new JLabel("Number 2:");
-        num2Label.setBounds(50,80,100,30);
-        add(num2Label);
+        numButtons[0] = new JButton("0");
+        numButtons[0].setBounds(30, y, 50, 40);
+        numButtons[0].addActionListener(this);
+        add(numButtons[0]);
 
-        num2Field = new JTextField();
-        num2Field.setBounds(150,80,150,30);
-        add(num2Field);
+        addBtn = new JButton("+"); addBtn.setBounds(90,  y,      50, 40);
+        subBtn = new JButton("-"); subBtn.setBounds(150, y,      50, 40);
+        mulBtn = new JButton("*"); mulBtn.setBounds(210, 80,     50, 40);
+        divBtn = new JButton("/"); divBtn.setBounds(210, 130,    50, 40);
+        eqBtn  = new JButton("="); eqBtn .setBounds(210, 180,    50, 40);
+        clrBtn = new JButton("C"); clrBtn.setBounds(150, y + 50, 50, 40);
 
-        addBtn = new JButton("Add");
-        addBtn.setBounds(40,140,80,40);
-        add(addBtn);
-
-        subBtn = new JButton("Subtract");
-        subBtn.setBounds(130,140,100,40);
-        add(subBtn);
-
-        mulBtn = new JButton("Multiply");
-        mulBtn.setBounds(240,140,100,40);
-        add(mulBtn);
-
-        divBtn = new JButton("Divide");
-        divBtn.setBounds(150,190,100,40);
-        add(divBtn);
-
-        resultLabel = new JLabel("Result:");
-        resultLabel.setBounds(50,240,100,30);
-        add(resultLabel);
-
-        resultField = new JTextField();
-        resultField.setBounds(150,240,150,30);
-        resultField.setEditable(false);
-        add(resultField);
-
-        addBtn.addActionListener(this);
-        subBtn.addActionListener(this);
-        mulBtn.addActionListener(this);
-        divBtn.addActionListener(this);
+        for (JButton btn : new JButton[]{addBtn, subBtn, mulBtn, divBtn, eqBtn, clrBtn}) {
+            btn.addActionListener(this);
+            add(btn);
+        }
 
         setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
 
-        double num1 = Double.parseDouble(num1Field.getText());
-        double num2 = Double.parseDouble(num2Field.getText());
-        double result = 0;
+        // Number buttons
+        for (int i = 0; i < 10; i++) {
+            if (e.getSource() == numButtons[i]) {
+                if (startNewNumber) {
+                    // Keep "5 + " prefix, just append the new digit
+                    display.setText(display.getText() + i);
+                    startNewNumber = false;
+                } else {
+                    display.setText(display.getText() + i);
+                }
+                return;
+            }
+        }
 
-        if(e.getSource() == addBtn)
-            result = num1 + num2;
+        // Operator buttons
+        if (e.getSource() == addBtn || e.getSource() == subBtn ||
+                e.getSource() == mulBtn || e.getSource() == divBtn) {
+            try {
+                firstNumber = Double.parseDouble(display.getText());
+                operator = ((JButton) e.getSource()).getText();
+                display.setText(display.getText() + " " + operator + " "); // show "5 + "
+                startNewNumber = true;
+            } catch (NumberFormatException ex) {
+                display.setText("Invalid Input");
+            }
+            return;
+        }
 
-        else if(e.getSource() == subBtn)
-            result = num1 - num2;
+        // Equals button
+        if (e.getSource() == eqBtn) {
+            try {
+                // Extract second number from end of expression string
+                String text = display.getText().trim();
+                String[] parts = text.split(" ");
+                double secondNumber = Double.parseDouble(parts[parts.length - 1]);
 
-        else if(e.getSource() == mulBtn)
-            result = num1 * num2;
+                double result = 0;
+                switch (operator) {
+                    case "+": result = firstNumber + secondNumber; break;
+                    case "-": result = firstNumber - secondNumber; break;
+                    case "*": result = firstNumber * secondNumber; break;
+                    case "/":
+                        if (secondNumber == 0) {
+                            display.setText("Cannot divide by 0");
+                            return;
+                        }
+                        result = firstNumber / secondNumber;
+                        break;
+                    default:
+                        display.setText("No operator");
+                        return;
+                }
 
-        else if(e.getSource() == divBtn)
-            result = num1 / num2;
+                // Show clean integer if result is whole number
+                if (result == (long) result)
+                    display.setText(String.valueOf((long) result));
+                else
+                    display.setText(String.valueOf(result));
 
-        resultField.setText(String.valueOf(result));
+                startNewNumber = true;
+
+            } catch (NumberFormatException ex) {
+                display.setText("Error");
+            }
+            return;
+        }
+
+        // Clear button
+        if (e.getSource() == clrBtn) {
+            display.setText("");
+            firstNumber = 0;
+            operator = " ";
+            startNewNumber = true;
+        }
     }
 
     public static void main(String[] args) {
-
         new SimpleCalculator();
-
     }
 }
