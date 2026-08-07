@@ -1,9 +1,8 @@
-public class Main {
-    static void welcomeMessage(){
-        System.out.println("Welcome to java!");
+public class Main{
+    public static void greet(){
+        System.out.println("Hello world!");
     }
     public static void main(String [] args){
-        welcomeMessage();
+        greet();
     }
-    
 }
